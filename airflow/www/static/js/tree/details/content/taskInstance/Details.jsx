@@ -25,10 +25,10 @@ import {
 } from '@chakra-ui/react';
 
 import { finalStatesMap } from '../../../../utils';
-import { getDuration, formatDuration } from '../../../../datetime_utils';
 import { SimpleStatus } from '../../../StatusBox';
-import Time from '../../../Time';
 import { ClipboardText } from '../../../Clipboard';
+import Timeline from './Timeline';
+import Time from '../../../Time';
 
 const Details = ({ instance, group, operator }) => {
   const isGroup = !!group.children;
@@ -37,11 +37,11 @@ const Details = ({ instance, group, operator }) => {
   const {
     taskId,
     runId,
-    duration,
     startDate,
     endDate,
     state,
     mappedStates,
+    queueDate,
   } = instance;
 
   const {
@@ -81,8 +81,8 @@ const Details = ({ instance, group, operator }) => {
   });
 
   const taskIdTitle = isGroup ? 'Task Group Id: ' : 'Task Id: ';
-  const isStateFinal = ['success', 'failed', 'upstream_failed', 'skipped'].includes(state);
   const isOverall = (isMapped || isGroup) && 'Overall ';
+  const isStateFinal = ['success', 'failed', 'upstream_failed', 'skipped'].includes(state);
 
   return (
     <Flex flexWrap="wrap" justifyContent="space-between">
@@ -130,12 +130,21 @@ const Details = ({ instance, group, operator }) => {
           </Text>
         )}
         <br />
+        <Timeline
+          startDate={startDate}
+          endDate={endDate}
+          queueDate={queueDate}
+          state={state}
+          isOverall={isOverall}
+        />
+        <br />
+        {queueDate && (
         <Text>
-          {isOverall}
-          Duration:
+          Queued:
           {' '}
-          {formatDuration(duration || getDuration(startDate, endDate))}
+          <Time dateTime={queueDate} />
         </Text>
+        )}
         {startDate && (
         <Text>
           Started:

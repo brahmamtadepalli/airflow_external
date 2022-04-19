@@ -31,10 +31,10 @@ import {
 } from 'react-icons/md';
 
 import { getMetaValue } from '../../../../utils';
-import { formatDateTime, formatDuration } from '../../../../datetime_utils';
 import { useMappedInstances } from '../../../api';
 import { SimpleStatus } from '../../../StatusBox';
 import Table from '../../../Table';
+import Timeline from './Timeline';
 
 const renderedTemplatesUrl = getMetaValue('rendered_templates_url');
 const logUrl = getMetaValue('log_url');
@@ -83,9 +83,15 @@ const MappedInstances = ({
             {mi.state || 'no status'}
           </Flex>
         ),
-        duration: mi.duration && formatDuration(mi.duration),
-        startDate: mi.startDate && formatDateTime(mi.startDate),
-        endDate: mi.endDate && formatDateTime(mi.endDate),
+        duration: (
+          <Timeline
+            queueDate={mi.queuedWhen}
+            startDate={mi.startDate}
+            endDate={mi.endDate}
+            state={mi.state}
+            showDates
+          />
+        ),
         links: (
           <Flex alignItems="center">
             <IconLink mr={1} title="Details" aria-label="Details" icon={<MdDetails />} href={detailsLink} />
@@ -112,16 +118,6 @@ const MappedInstances = ({
       {
         Header: 'Duration',
         accessor: 'duration',
-        disableSortBy: true,
-      },
-      {
-        Header: 'Start Date',
-        accessor: 'startDate',
-        disableSortBy: true,
-      },
-      {
-        Header: 'End Date',
-        accessor: 'endDate',
         disableSortBy: true,
       },
       {

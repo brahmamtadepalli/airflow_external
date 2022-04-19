@@ -103,6 +103,9 @@ def get_mapped_summary(parent_instance, task_instances):
             group_state = state
             break
 
+    group_queue_date = datetime_to_string(
+        min((ti.queued_dttm for ti in task_instances if ti.queued_dttm), default=None)
+    )
     group_start_date = datetime_to_string(
         min((ti.start_date for ti in task_instances if ti.start_date), default=None)
     )
@@ -120,6 +123,7 @@ def get_mapped_summary(parent_instance, task_instances):
         'run_id': parent_instance.run_id,
         'state': group_state,
         'start_date': group_start_date,
+        'queue_date': group_queue_date,
         'end_date': group_end_date,
         'mapped_states': mapped_states,
         'try_number': try_count,
@@ -149,6 +153,7 @@ def encode_ti(
         'start_date': datetime_to_string(task_instance.start_date),
         'end_date': datetime_to_string(task_instance.end_date),
         'try_number': try_count,
+        'queue_date': datetime_to_string(task_instance.queued_dttm),
     }
 
 

@@ -36,7 +36,7 @@ const Details = () => {
     <Flex borderLeftWidth="1px" flexDirection="column" pl={3} mr={3} flexGrow={1} maxWidth="750px">
       <Header />
       <Divider my={2} />
-      <Box minWidth="750px">
+      <Box minWidth="550px">
         {!selected.runId && !selected.taskId && <DagContent />}
         {selected.runId && !selected.taskId && (
           <DagRunContent runId={selected.runId} />
